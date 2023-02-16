@@ -1,0 +1,16 @@
+from machine import ADC
+import utime
+emg_adc = machine.ADC(26)
+conversion_factor = 3.3 / (65535)
+
+class emg:
+    def __init__(self,adc):
+      self.adc = machine.ADC(adc)
+
+    def __read(self,val=0):
+utime.leep(2
+        val = self.adc.read_u16() * conversion_factor
+        return val
+
+    def continuousRead(self,val=0):
+        self.__read(val)
