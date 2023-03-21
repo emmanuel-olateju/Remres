@@ -17,18 +17,10 @@ artifacts = {1:'neck',2:'right_leg',3:'left_leg',4:'shoulder'
 motorPattern = [1,2,3,1,5,4,1]
 cueClasses = ['m', 'r', 'a']
 
-# noSessionIterations = int(input("Enter no of session iterations:"))
-# trialPerClass = int(input("Enter no of trials per class:"))
-# epochTime = float(input("Enter epoch time frame in seconds:"))
-
 cue = []
 
 
 def cue_generator(trialPerClass):
-# DAQ = 0
-
-# while DAQ != noSessionIterations:
-    # DAQ += 1
     useTime = False
     cueClassChoice = np.random.choice(np.array(cueClasses))
     # print(cueClassChoice)   #for testing to be removed

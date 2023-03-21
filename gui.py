@@ -19,13 +19,11 @@ class CueGeneratorThread(QThread):
         while DAQ != self.iterations:
             DAQ += 1
             cue_class, cues, useTime = generator(self.trials)
+            self.output_signal.emit(cue_class)
 
             for cue in cues:
-                output = cue
-                if DAQ == 0:
-                    self.output_signal.emit(cue_class)
+                output = cue                
                 self.output_signal.emit(output)
-                # if useTime:
                 time.sleep(self.epoch_time)
                 self.output_signal.emit('')
         
