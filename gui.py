@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
+from gui_cue_generator import cue_generator as generator
 import time
 
 class CueGeneratorThread(QThread):
@@ -13,16 +14,21 @@ class CueGeneratorThread(QThread):
         self.epoch_time = epoch_time
 
     def run(self):
-        for i in range(self.iterations):
-            output = cue_generator(self.trials)
-            self.output_signal.emit(output)
-            time.sleep(self.epoch_time)
-            self.output_signal.emit('')
+        DAQ = 0
 
-def cue_generator(trials):
-    # Your implementation of the cue generator function goes here
-    # This is just an example implementation that returns a string with the number of trials
-    return f"{trials} trials generated"
+        while DAQ != self.iterations:
+            DAQ += 1
+            cue_class, cues, useTime = generator(self.trials)
+
+            for cue in cues:
+                output = cue
+                if DAQ == 0:
+                    self.output_signal.emit(cue_class)
+                self.output_signal.emit(output)
+                # if useTime:
+                time.sleep(self.epoch_time)
+                self.output_signal.emit('')
+        
 
 class MainWindow(QWidget):
     def __init__(self):
