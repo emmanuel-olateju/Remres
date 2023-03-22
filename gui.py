@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
-from gui_cue_generator import cue_generator as generator
+from gui_cue_generator import cue_generator
 import time
 
 class CueGeneratorThread(QThread):
@@ -18,14 +18,13 @@ class CueGeneratorThread(QThread):
 
         while DAQ != self.iterations:
             DAQ += 1
-            cue_class, cues, useTime = generator(self.trials)
+            cue_class, cues, useTime = cue_generator(self.trials)
             self.output_signal.emit(cue_class)
 
-            for cue in cues:
-                output = cue                
-                self.output_signal.emit(output)
+            for cue in cues:               
+                self.output_signal.emit(cue)
                 time.sleep(self.epoch_time)
-                self.output_signal.emit('')
+        self.output_signal.emit('End of sessions')
         
 
 class MainWindow(QWidget):
@@ -72,11 +71,7 @@ class MainWindow(QWidget):
 
     def update_output_label(self, output):
         # Update the output label with the current output
-        current_text = self.output_label.text()
-        if current_text == '':
-            self.output_label.setText(output)
-        else:
-            self.output_label.setText(f"{current_text}\n{output}")
+        self.output_label.setText(output)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
