@@ -1,8 +1,9 @@
 import sys
+import time
+import numpy as np
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from gui_cue_generator import cue_generator
-import time
 
 class CueGeneratorThread(QThread):
     output_signal = pyqtSignal(str)
@@ -12,19 +13,27 @@ class CueGeneratorThread(QThread):
         self.iterations = iterations
         self.trials = trials
         self.epoch_time = epoch_time
+        self.dataset = {}
 
     def run(self):
         DAQ = 0
+        data_size = int(self.epoch_time/0.001)
+        self.output_signal.emit('Start of Sessions')
+        time.sleep(2)
 
         while DAQ != self.iterations:
             DAQ += 1
             cue_class, cues, useTime = cue_generator(self.trials)
-            self.output_signal.emit(cue_class)
+            self.dataset[cue_class] = {}
+            self.output_signal.emit(f'Cue Class- {cue_class}')
+            time.sleep(2)
 
-            for cue in cues:               
+            for cue in cues:
+                self.dataset[cue_class][cue] = np.empty((0, data_size))       
                 self.output_signal.emit(cue)
                 time.sleep(self.epoch_time)
         self.output_signal.emit('End of sessions')
+        print(self.dataset)
         
 
 class MainWindow(QWidget):
