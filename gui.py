@@ -4,6 +4,7 @@ import numpy as np
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from gui_cue_generator import cue_generator
+from .gui_emg_object import emg_signal
 
 class CueGeneratorThread(QThread):
     output_signal = pyqtSignal(str)
@@ -14,10 +15,12 @@ class CueGeneratorThread(QThread):
         self.trials = trials
         self.epoch_time = epoch_time
         self.dataset = {}
+        data_size = int(self.epoch_time/0.001)
+        self.shape = np.empty((0, data_size))
+        self.emg = emg_signal(26, self.epoch_time)  
 
     def run(self):
         DAQ = 0
-        data_size = int(self.epoch_time/0.001)
         self.output_signal.emit('Start of Sessions')
         time.sleep(2)
 
@@ -29,7 +32,8 @@ class CueGeneratorThread(QThread):
             time.sleep(2)
 
             for cue in cues:
-                self.dataset[cue_class][cue] = np.empty((0, data_size))       
+                readings = self.emg.__read()
+                self.dataset[cue_class][cue] = np.vstack((self.shape, readings))     
                 self.output_signal.emit(cue)
                 time.sleep(self.epoch_time)
         self.output_signal.emit('End of sessions')
