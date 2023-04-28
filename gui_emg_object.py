@@ -22,7 +22,7 @@ class emg_signal:
         time.sleep(0.001)
         # temp =  self.__adc.read_u16()
         # temp *= conversion_factor
-        data = random.random()
+        temp = random.random()
         # try:
         #     self.data[self.count] = temp
         #     self.count += 1
@@ -35,7 +35,7 @@ class emg_signal:
 
         # if self.file != None:
         #    self.file.write(str(temp)+",")
-        return data
+        return temp
 
     def continuous_read(self,Ns=100,val=0):
         data = []

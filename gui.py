@@ -40,7 +40,7 @@ class CueGeneratorThread(QThread):
             for cue in cues:   
                 self.output_signal.emit(cue)
                 readings = self.emg.continuous_read()  
-                time.sleep(self.epoch_time)
+                # time.sleep(self.epoch_time)
                 
                 try:
                     if not self.dataset[cue_class].get(cue, None):
@@ -50,7 +50,7 @@ class CueGeneratorThread(QThread):
                 print(cue)
                 print(self.dataset[cue_class][cue].shape)
         self.output_signal.emit('End of sessions')
-        # print(self.dataset)
+        print(self.dataset.keys())
         
         
 
@@ -87,7 +87,7 @@ class MainWindow(QWidget):
         # Get the inputs from the user
         iterations = int(self.iterations_input.text())
         trials = int(self.trials_input.text())
-        epoch_time = int(self.epoch_time_input.text())
+        epoch_time = float(self.epoch_time_input.text())
 
         # Create the cue generator thread and connect the output signal to the output label
         self.thread = CueGeneratorThread(iterations, trials, epoch_time, 'test')
