@@ -10,7 +10,7 @@ conversion_factor = 3.3 / (65535)
 class emg_signal:
     def __init__(self,adc_pin,epoch_time,file_name=' '):
         # self.__adc = machine.ADC(adc_pin)
-        self.data_size = int(epoch_time/0.001)
+        self.data_size = int(float(epoch_time)/0.001)
         # self.count = 0
         # if file_name != ' ':
         #     print('file use')

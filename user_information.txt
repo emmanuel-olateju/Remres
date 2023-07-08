@@ -1,0 +1,5 @@
+Name: Dosu
+Age: 20
+Affected Part: Arm
+Residual Sensory Capability: 3
+Gender: Male
