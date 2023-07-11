@@ -20,9 +20,9 @@ cueClasses = ['m', 'r', 'a']
 cue = []
 
 
-def cue_generator(trialPerClass):
+def cue_generator(trialPerClass, cueClassChoice):
     useTime = False
-    cueClassChoice = np.random.choice(np.array(cueClasses))
+    # cueClassChoice = np.random.choice(np.array(cueClasses))
     # print(cueClassChoice)   #for testing to be removed
     if cueClassChoice == 'm':
         for trial in range(trialPerClass):

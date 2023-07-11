@@ -9,11 +9,12 @@ class CueGeneratorThread(QThread):
     output_signal = pyqtSignal(str)
     array = pyqtSignal(np.ndarray)
 
-    def __init__(self, iterations, trials, epoch_time, file_name=' '):
+    def __init__(self, iterations, trials, epoch_time, cue_class, file_name=' '):
         super().__init__()
         self.iterations = int(iterations)
         self.trials = int(trials)
         self.epoch_time = float(epoch_time)
+        self.cue_class = cue_class
         self.dataset = {}
         self.data_size = int(self.epoch_time/0.001)
         self.shape = np.empty((0, self.data_size))
@@ -32,7 +33,7 @@ class CueGeneratorThread(QThread):
 
         while DAQ != self.iterations:
             DAQ += 1
-            cue_class, cues, useTime = cue_generator(self.trials)
+            cue_class, cues, useTime = cue_generator(self.trials, self.cue_class)
             self.dataset[cue_class] = {}
 
             for cue in cues:   

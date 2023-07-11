@@ -5,12 +5,13 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from thread import CueGeneratorThread
 
 class SignalWindow(QMainWindow):
-    def __init__(self, iterations, trials, epoch_time):
+    def __init__(self, iterations, trials, epoch_time, cue_class):
         super(SignalWindow, self).__init__()
 
         self.iterations = iterations
         self.trials = trials
         self.epoch_time = float(epoch_time)
+        self.cue_class = cue_class
 
         # Create a QLabel for the large section
         self.large_label = QLabel("Look here for the cues")
@@ -40,7 +41,7 @@ class SignalWindow(QMainWindow):
 
     def start_clicked(self):
         # Create the cue generator thread and connect the output signal to the output label
-        self.thread = CueGeneratorThread(self.iterations, self.trials, self.epoch_time, 'test')
+        self.thread = CueGeneratorThread(self.iterations, self.trials, self.epoch_time, self.cue_class, 'test')
         self.thread.output_signal.connect(self.update_output_label)
         self.thread.array.connect(self.update_figures)
 

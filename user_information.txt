@@ -1,5 +1,5 @@
-Name: Dosu
-Age: 22
+Name: Howard
+Age: 33
 Affected Part: Arm
-Residual Sensory Capability: 6
+Residual Sensory Capability: 4
 Gender: Male
