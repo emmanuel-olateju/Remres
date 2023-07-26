@@ -1,4 +1,4 @@
-from machine import ADC
+import machine
 import utime
 emg_adc = machine.ADC(26)
 conversion_factor = 3.3 / (65535)
@@ -32,4 +32,4 @@ if __name__ == '__main__':
     va=0
     la=emg_signal(26,'test')
     while True:
-        print(la.__read(va))
+        print(la.__continuous_read(va))
