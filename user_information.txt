@@ -1,5 +1,5 @@
-Name: Howard
+Name: DEE
 Age: 33
-Affected Part: Arm
-Residual Sensory Capability: 4
+Affected Part: forearm
+Residual Sensory Capability: 1
 Gender: Male
