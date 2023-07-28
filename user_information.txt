@@ -1,5 +1,5 @@
-Name: bty
-Age: 44
-Affected Part: 
-Residual Sensory Capability: 4
+Name: d
+Age: 33
+Affected Part: arm
+Residual Sensory Capability: 0
 Gender: Male
