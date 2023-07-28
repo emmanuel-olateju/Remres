@@ -7,7 +7,7 @@ from emg_object import emg_signal
 
 class CueGeneratorThread(QThread):
     output_signal = pyqtSignal(str)
-    array = pyqtSignal(np.ndarray)
+    array = pyqtSignal(float)
 
     def __init__(self, iterations, trials, epoch_time, cue_class, file_name=' '):
         super().__init__()
@@ -18,7 +18,7 @@ class CueGeneratorThread(QThread):
         self.dataset = {}
         self.data_size = int(self.epoch_time/0.001)
         self.shape = np.empty((0, self.data_size))
-        self.emg = emg_signal('COM8', self.epoch_time, 'test') 
+        self.emg = emg_signal('COM15', self.epoch_time, 'test') 
 
         # if file_name != ' ':
         #     print('file use')
@@ -28,7 +28,7 @@ class CueGeneratorThread(QThread):
 
     def run(self):
         DAQ = 0
-        self.output_signal.emit('Start of Sessions')
+        # self.output_signal.emit('Start of Sessions')
         # time.sleep(2)
 
         while DAQ != self.iterations:
@@ -37,19 +37,25 @@ class CueGeneratorThread(QThread):
             self.dataset[cue_class] = {}
 
             for cue in cues:   
-                # self.output_signal.emit(cue)
-                self.readings = self.emg.continuous_read() 
+                count = 1
                 self.output_signal.emit(cue)
-                self.array.emit(self.readings) 
+                time.sleep(2)
+
+                for  i in range(self.data_size+3):
+                    self.readings = self.emg.read() 
+                    # self.output_signal.emit(cue)
+                    if count > 3:
+                        self.array.emit(self.readings)
+                    count += 1 
                 # time.sleep(self.epoch_time)
                 
-                try:
-                    if not self.dataset[cue_class].get(cue, None):
-                        self.dataset[cue_class][cue] = self.readings
-                except:
-                    self.dataset[cue_class][cue] = np.vstack((self.dataset[cue_class][cue], self.readings))
+                # try:
+                #     if not self.dataset[cue_class].get(cue, None):
+                #         self.dataset[cue_class][cue] = [self.readings]
+                # except:
+                #     self.dataset[cue_class][cue] = np.vstack((self.dataset[cue_class][cue], self.readings))
             
-                print(cue)
-                print(self.dataset[cue_class][cue].shape)
+                # print(cue)
+                # print(self.dataset[cue_class][cue].shape)
         self.output_signal.emit('End of sessions')
-        print(self.dataset.keys())
+        # print(self.dataset.keys())

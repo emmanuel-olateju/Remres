@@ -3,6 +3,10 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QGridLayout, QVBoxLayout, QWidget, QPushButton, QLabel
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from thread import CueGeneratorThread
+import numpy as np
+
+plot_y = np.zeros((300))
+plot_x = np.arange(0,300,1)
 
 class SignalWindow(QMainWindow):
     def __init__(self, iterations, trials, epoch_time, cue_class):
@@ -53,36 +57,41 @@ class SignalWindow(QMainWindow):
         self.large_label.setText(output)
 
     def update_figures(self, readings):
-        y = []
+        plot_y[:-1]=plot_y[1:]
+        plot_y[-1] = readings
+        print(plot_y)
+        
         datasize = int(self.epoch_time/0.001)
 
-        for i in range(datasize):
-            if not y:
-                y = [0]
-            else:
-                y.append(y[-1] + 0.001)
+        # for i in range(datasize):
+        #     if not plot_y:
+        #         plot_y = [0]
+        #     else:
+        #         y.append(y[-1] + 0.001)
                 
         self.small_canvas1.figure.clear()
-        self.small_canvas2.figure.clear()
-        self.small_canvas3.figure.clear()
+        # ax1 = self.small_canvas1.figure.add_subplot(111)
+        # ax1.plot(plot_x,plot_y)
+        # self.small_canvas2.figure.clear()
+        # self.small_canvas3.figure.clear()
 
-        # Create subplots and plot the data
+        # # Create subplots and plot the data
         ax1 = self.small_canvas1.figure.add_subplot(111)
-        ax1.scatter(readings, y, color='red', alpha=0.7)
-        ax1.set_facecolor('none')
+        ax1.plot(plot_x, plot_y, color='red')
+        # ax1.set_facecolor('none')
         ax1.set_title('Raw EMG Signal')
 
-        ax2 = self.small_canvas2.figure.add_subplot(111)
-        ax2.scatter(readings, y, color='green', alpha=0.7)
-        ax2.set_facecolor('none')
-        ax2.set_title('Filtered EMG Signal')
+        # ax2 = self.small_canvas2.figure.add_subplot(111)
+        # ax2.scatter(plot_x, plot_y, color='green', alpha=0.7)
+        # ax2.set_facecolor('none')
+        # ax2.set_title('Filtered EMG Signal')
 
-        ax3 = self.small_canvas3.figure.add_subplot(111)
-        ax3.scatter(readings, y, color='blue', alpha=0.7)
-        ax3.set_facecolor('none')
-        ax3.set_title('Analysis')
+        # ax3 = self.small_canvas3.figure.add_subplot(111)
+        # ax3.scatter(plot_x, plot_y, color='blue', alpha=0.7)
+        # ax3.set_facecolor('none')
+        # ax3.set_title('Analysis')
 
-        # Refresh the canvases
+        # # Refresh the canvases
         self.small_canvas1.draw()
-        self.small_canvas2.draw()
-        self.small_canvas3.draw()
+        # self.small_canvas2.draw()
+        # self.small_canvas3.draw()
