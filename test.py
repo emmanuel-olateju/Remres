@@ -22,15 +22,15 @@
 import serial
 
 # Set the serial port and baud rate to match the Raspberry Pi Pico's settings
-serial_port = "COM10"  # Update this to the correct port (Windows: "COMX", Mac/Linux: "/dev/ttyACMX")
-baud_rate = 9600  # Update this to match the baud rate set on the Raspberry Pi Pico
+serial_port = "COM8"  # Update this to the correct port (Windows: "COMX", Mac/Linux: "/dev/ttyACMX")
+baud_rate = 115200  # Update this to match the baud rate set on the Raspberry Pi Pico
 
 def receive_data_from_pico():
     try:
         # ser = serial.Serial(serial_port)
         # x = ser.read()
-        with serial.Serial(serial_port, 9600, timeout=1) as ser:
-            x = ser.read()          # read one byte
+        with serial.Serial(serial_port, baud_rate, timeout=1) as ser:
+            x = ser.read(10)          # read one byte
             # s = ser.read(10) 
             print(ser.name)
             print(x)

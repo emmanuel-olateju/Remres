@@ -1,5 +1,5 @@
-Name: DEE
-Age: 33
-Affected Part: forearm
-Residual Sensory Capability: 1
+Name: bty
+Age: 44
+Affected Part: 
+Residual Sensory Capability: 4
 Gender: Male
