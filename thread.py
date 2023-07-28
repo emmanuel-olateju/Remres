@@ -3,7 +3,7 @@ import numpy as np
 from PyQt5.QtCore import QThread, pyqtSignal
 from matplotlib.figure import Figure
 from gui_cue_generator import cue_generator
-from gui_emg_object import emg_signal
+from emg_object import emg_signal
 
 class CueGeneratorThread(QThread):
     output_signal = pyqtSignal(str)
@@ -18,7 +18,7 @@ class CueGeneratorThread(QThread):
         self.dataset = {}
         self.data_size = int(self.epoch_time/0.001)
         self.shape = np.empty((0, self.data_size))
-        self.emg = emg_signal(26, self.epoch_time) 
+        self.emg = emg_signal('COM8', self.epoch_time, 'test') 
 
         # if file_name != ' ':
         #     print('file use')

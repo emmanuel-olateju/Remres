@@ -1,10 +1,5 @@
-import sys
-import time
 import numpy as np
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QComboBox
-from PyQt5.QtCore import Qt, QThread, pyqtSignal
-from gui_cue_generator import cue_generator
-from gui_emg_object import emg_signal
 from signal_gui import SignalWindow
         
 
