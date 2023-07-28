@@ -7,7 +7,7 @@ from emg_object import emg_signal
 
 class CueGeneratorThread(QThread):
     output_signal = pyqtSignal(str)
-    array = pyqtSignal(float)
+    array = pyqtSignal(np.ndarray)
 
     def __init__(self, iterations, trials, epoch_time, cue_class, file_name=' '):
         super().__init__()
@@ -18,7 +18,7 @@ class CueGeneratorThread(QThread):
         self.dataset = {}
         self.data_size = int(self.epoch_time/0.001)
         self.shape = np.empty((0, self.data_size))
-        self.emg = emg_signal('COM15', self.epoch_time, 'test') 
+        self.emg = emg_signal('COM11', self.epoch_time, 'test') 
 
         # if file_name != ' ':
         #     print('file use')
@@ -36,17 +36,18 @@ class CueGeneratorThread(QThread):
             cue_class, cues, useTime = cue_generator(self.trials, self.cue_class)
             self.dataset[cue_class] = {}
 
-            for cue in cues:   
+            for cue in cues+['End of sessions']:   
                 count = 1
                 self.output_signal.emit(cue)
-                time.sleep(2)
-
-                for  i in range(self.data_size+3):
+                print(cue)
+                epoch=list()
+                for  i in range(self.data_size+10):
                     self.readings = self.emg.read() 
-                    # self.output_signal.emit(cue)
-                    if count > 3:
-                        self.array.emit(self.readings)
-                    count += 1 
+                    print(self.readings)
+                    if count > 10:
+                        epoch.append(self.readings)
+                    count += 1
+                self.array.emit(np.array(epoch))
                 # time.sleep(self.epoch_time)
                 
                 # try:
