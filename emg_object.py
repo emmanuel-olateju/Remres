@@ -17,18 +17,17 @@ class emg_signal:
             self.file = open(file_name+'.csv','w')
         else:
             self.file = None
+
+        time.sleep(4)
         
     def read(self,val=0):
         time.sleep(0.001)
         self.ser.reset_output_buffer()
         self.ser.reset_input_buffer()
         self.ser.write(bytes([1]))
-        # time.sleep(0.001)
         self.line=self.ser.read(3)
         temp = (self.line[1]<<8)+(self.line[0]&0xff)
         temp *= conversion_factor
-        if self.file != None:
-           self.file.write(str(temp)+",")
         return temp
         
 
@@ -45,7 +44,7 @@ class emg_signal:
 if __name__ == '__main__':
     global va
     va=0
-    la = emg_signal('COM15', epoch_time=0.1, file_name='test', baud_rate=2000000)
+    la = emg_signal('COM11', epoch_time=0.1, file_name='test', baud_rate=2000000)
     time.sleep(2)
 
     while True:
