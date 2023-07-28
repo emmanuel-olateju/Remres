@@ -1,13 +1,14 @@
-from machine import UART
+from machine
 import machine
+import uos
 import utime
+from machine import Pin
 emg_adc = machine.ADC(26)
 conversion_factor = 3.3 / (65535)
 
 class emg_signal:
-    def __init__(self,adc_pin,file_name=' ',uart_num=0, baud_rate=9600):
+    def __init__(self,adc_pin,file_name=' '):
         self.__adc = machine.ADC(adc_pin)
-        # self.uart = UART(uart_num, baudrate=baud_rate, tx=machine.Pin(0), rx=machine.Pin(1))
 
         if file_name != ' ':
             # print('file use')
@@ -19,8 +20,8 @@ class emg_signal:
         utime.sleep(0.001)
         temp =  self.__adc.read_u16()
         temp *= conversion_factor
-        if self.file != None:
-           self.file.write(str(temp)+",")
+        # if self.file != None:
+        #    self.file.write(str(temp)+",")
         return temp
 
     def __continuous_read(self,Ns=100,val=0):
@@ -42,12 +43,21 @@ val_print = lambda x:print(x)
 if __name__ == '__main__':
     global va
     va=0
-    la = emg_signal(26, file_name='test',uart_num=0, baud_rate=9600)
-    uart = UART(0, baudrate=9600, tx=machine.Pin(0), rx=machine.Pin(1))
+
+    led = Pin(25,Pin.OUT)
+    la = emg_signal(26, file_name='test')
+    uart = machine.UART(0, baudrate=115200)
+    uart.init(115200, bits=8, parity=None, stop=1, tx=Pin(0), rx=Pin(1))
+    # uos.dupterm(uart)
 
     while True:
-        data = la.__read()
+        # data = la.__read()
         # data_bytes = ','.join([str(val) for val in data]).encode()
-        data_bytes = str(data).encode()
-        uart.write(data_bytes)
+        # data_bytes = str(data).encode()
+        # uart.write(b'hello world\n\r')
+        uart.write(b'1')
         # print(la.__continuous_read(val=va))
+        led.value(1)
+        utime.sleep(0.5)
+        led.value(0)
+        utime.sleep(0.5)
