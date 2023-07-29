@@ -1,5 +1,0 @@
-Name: d
-Age: 33
-Affected Part: arm
-Residual Sensory Capability: 0
-Gender: Male
