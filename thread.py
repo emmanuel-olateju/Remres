@@ -18,18 +18,10 @@ class CueGeneratorThread(QThread):
         self.dataset = {}
         self.data_size = int(self.epoch_time/0.001)
         self.shape = np.empty((0, self.data_size))
-        self.emg = emg_signal('COM11', self.epoch_time, 'test') 
-
-        # if file_name != ' ':
-        #     print('file use')
-        #     self.file = open(file_name+'.csv','w')
-        # else:
-        #     self.file = None 
+        self.emg = emg_signal('COM15', self.epoch_time, 'test') 
 
     def run(self):
         DAQ = 0
-        # self.output_signal.emit('Start of Sessions')
-        # time.sleep(2)
 
         while DAQ != self.iterations:
             DAQ += 1
@@ -48,15 +40,4 @@ class CueGeneratorThread(QThread):
                         epoch.append(self.readings)
                     count += 1
                 self.array.emit(np.array(epoch))
-                # time.sleep(self.epoch_time)
-                
-                # try:
-                #     if not self.dataset[cue_class].get(cue, None):
-                #         self.dataset[cue_class][cue] = [self.readings]
-                # except:
-                #     self.dataset[cue_class][cue] = np.vstack((self.dataset[cue_class][cue], self.readings))
-            
-                # print(cue)
-                # print(self.dataset[cue_class][cue].shape)
         self.output_signal.emit('End of sessions')
-        # print(self.dataset.keys())

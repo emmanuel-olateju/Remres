@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QComboBox
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from settings_gui import SettingsWindow
-from PyQt5.QtGui import QIntValidator
+from PyQt5.QtGui import QIntValidator, QFont
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -17,6 +17,13 @@ class MainWindow(QWidget):
         self.affected_part_label = QLabel('Affected Part:', self)
         self.residual_capability_label = QLabel('Residual Sensory Capability:', self)
         self.gender_label = QLabel('Gender:', self)
+
+        # Style labels
+        self.name_label.setFont(QFont('Arial', 10))
+        self.age_label.setFont(QFont('Arial', 10))
+        self.affected_part_label.setFont(QFont('Arial', 10))
+        self.residual_capability_label.setFont(QFont('Arial', 10))
+        self.gender_label.setFont(QFont('Arial', 10))
 
         # Create input fields
         self.name_input = QLineEdit(self)
@@ -66,7 +73,7 @@ class MainWindow(QWidget):
         self.close()
 
         # Open the new window
-        self.new_window = SettingsWindow()
+        self.new_window = SettingsWindow(name)
         self.new_window.show()
 
 
