@@ -1,13 +1,15 @@
 import numpy as np
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QComboBox
+from PyQt5.QtGui import QFont
 from signal_gui import SignalWindow
         
 
 class SettingsWindow(QWidget):
-    def __init__(self):
+    def __init__(self, name):
         super().__init__()
 
         # Create the widgets
+        self.name = name
         self.iterations_label = QLabel('Number of session iterations:', self)
         self.trials_label = QLabel('Trials per class:', self)
         self.epoch_time_label = QLabel('Epoch time (seconds):', self)
@@ -19,6 +21,12 @@ class SettingsWindow(QWidget):
         self.cue_class_input.addItems(['m', 'r', 'a'])
         self.generate_button = QPushButton('Generate', self)
         self.output_label = QLabel(self)
+
+        # Style Labels
+        self.iterations_label.setFont(QFont('Arial', 10))
+        self.trials_label.setFont(QFont('Arial', 10))
+        self.epoch_time_label.setFont(QFont('Arial', 10))
+        self.cue_class_label.setFont(QFont('Arial', 10))
 
         # Create the layout
         vbox = QVBoxLayout(self)
@@ -43,5 +51,5 @@ class SettingsWindow(QWidget):
         cue_class = self.cue_class_input.currentText()
 
         self.close()
-        self.new_window = SignalWindow(iterations, trials, epoch_time, cue_class)
+        self.new_window = SignalWindow(iterations, trials, epoch_time, cue_class, self.name)
         self.new_window.show()

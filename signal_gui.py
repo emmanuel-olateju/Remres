@@ -1,16 +1,18 @@
 import matplotlib.pyplot as plt
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QGridLayout, QVBoxLayout, QWidget, QPushButton, QLabel
+from PyQt5.QtGui import QFont
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from thread import CueGeneratorThread
 import numpy as np
 import joblib
+import os
 
 # plot_y = np.zeros((10))
 # plot_x = np.arange(0,10,1)
 
 class SignalWindow(QMainWindow):
-    def __init__(self, iterations, trials, epoch_time, cue_class):
+    def __init__(self, iterations, trials, epoch_time, cue_class, name):
         super(SignalWindow, self).__init__()
 
         self.iterations = iterations
@@ -18,7 +20,14 @@ class SignalWindow(QMainWindow):
         self.epoch_time = float(epoch_time)
         self.data_size = int(self.epoch_time/0.001)
         self.cue_class = cue_class
+        self.name = name
         self.current_cue = None
+        self.color = {
+            'm': ['#eb3a34', '#c41b16', '#eb605b', '#d12d28', '#ba0d07', '#de8c8a', '#fa1007', '#c90d06'],
+            'r': ['#06c9c6', '#076664', '#99f0ee'],
+            'a': ['#8078bf', '#1f0bd4', '#6b5ced', '#524f75', '#4d42ad']
+        }
+        self.cue_color = self.color[cue_class]
 
         self.session_data = {
             'emg':np.empty((0,self.data_size)),
@@ -27,12 +36,8 @@ class SignalWindow(QMainWindow):
 
         # Create a QLabel for the large section
         self.large_label = QLabel("Look here for the cues")
+        self.large_label.setFont(QFont('Arial', 50))
         self.large_label.setAlignment(Qt.AlignCenter)
-
-        # Create FigureCanvases for the small plots
-        self.small_canvas1 = FigureCanvas(plt.figure())
-        self.small_canvas2 = FigureCanvas(plt.figure())
-        self.small_canvas3 = FigureCanvas(plt.figure())
 
         # Create a Start button
         self.start_button = QPushButton('Start')
@@ -41,9 +46,6 @@ class SignalWindow(QMainWindow):
         # Set up the layout
         layout = QGridLayout()
         layout.addWidget(self.large_label, 0, 0, 2, 2)
-        layout.addWidget(self.small_canvas1, 0, 2)
-        layout.addWidget(self.small_canvas2, 1, 2)
-        layout.addWidget(self.small_canvas3, 2, 2)
         layout.addWidget(self.start_button, 3, 0, 1, 3)
 
         # Create a central widget and set the layout
@@ -62,6 +64,8 @@ class SignalWindow(QMainWindow):
 
     def update_output_label(self, output):
         # Update the output label with the current output
+        random_color = np.random.choice(self.cue_color)
+        self.large_label.setStyleSheet(f"color: {random_color};")
         self.large_label.setText(output)
         self.current_cue = output
 
@@ -69,48 +73,9 @@ class SignalWindow(QMainWindow):
         self.session_data['emg'] = np.vstack((self.session_data['emg'],array.reshape(1,self.data_size)))
         self.session_data['cue'].append(self.current_cue)
         if self.current_cue=='End of sessions':
+            current_dir = os.getcwd()
+            # path = None
             print(self.session_data['emg'].shape, len(self.session_data['cue']))
-            # joblib.dump('dataset/{name}/{how_many}.sav')
-
-
-
-    # def update_figures(self, readings):
-    #     self.large_label.setText(str(readings))
-    #     plot_y[:-1]=plot_y[1:]
-    #     plot_y[-1] = readings
-    #     # print(plot_y)
-        
-    #     # datasize = int(self.epoch_time/0.001)
-
-    #     # for i in range(datasize):
-    #     #     if not plot_y:
-    #     #         plot_y = [0]
-    #     #     else:
-    #     #         y.append(y[-1] + 0.001)
-                
-    #     self.small_canvas1.figure.clear()
-    #     ax1 = self.small_canvas1.figure.add_subplot(111)
-    #     ax1.plot(plot_x,plot_y)
-    #     # self.small_canvas2.figure.clear()
-    #     # self.small_canvas3.figure.clear()
-
-    #     # # Create subplots and plot the data
-    #     # ax1 = self.small_canvas1.figure.add_subplot(111)
-    #     # ax1.plot(plot_x, plot_y, color='red')
-    #     # ax1.set_facecolor('none')
-    #     ax1.set_title('Raw EMG Signal')
-
-    #     # ax2 = self.small_canvas2.figure.add_subplot(111)
-    #     # ax2.scatter(plot_x, plot_y, color='green', alpha=0.7)
-    #     # ax2.set_facecolor('none')
-    #     # ax2.set_title('Filtered EMG Signal')
-
-    #     # ax3 = self.small_canvas3.figure.add_subplot(111)
-    #     # ax3.scatter(plot_x, plot_y, color='blue', alpha=0.7)
-    #     # ax3.set_facecolor('none')
-    #     # ax3.set_title('Analysis')
-
-    #     # # Refresh the canvases
-    #     self.small_canvas1.draw()
-    #     # self.small_canvas2.draw()
-    #     # self.small_canvas3.draw()
+            path = os.mkdir(f'{current_dir}/dataset/{self.name}')
+            count = len(os.listdir(path))+1
+            joblib.dump(self.session_data, f'{path}/{count}.sav')
