@@ -1,5 +1,5 @@
-Name: Amadi
-Age: 55
-Affected Part: arm
-Residual Sensory Capability: 1
+Name: d
+Age: 22
+Affected Part: 
+Residual Sensory Capability: 0
 Gender: Male
