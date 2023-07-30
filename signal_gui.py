@@ -75,13 +75,7 @@ class SignalWindow(QMainWindow):
         if self.current_cue=='End of sessions':
             current_dir = os.getcwd()
             # path = None
-            count = 1
             print(self.session_data['emg'].shape, len(self.session_data['cue']))
-            for stack in self.session_data['emg']:
-                try:
-                    path = os.mkdir(f'{current_dir}/dataset/{self.name}')
-                    joblib.dump(stack, f'{path}/{count}.sav')
-                except:
-                    path = f'{current_dir}/dataset/{self.name}'
-                    joblib.dump(stack, f'{path}/{count}.sav')
-                count += 1
+            path = os.mkdir(f'{current_dir}/dataset/{self.name}')
+            count = len(os.listdir(path))+1
+            joblib.dump(self.session_data, f'{path}/{count}.sav')
