@@ -1,8 +1,6 @@
-import matplotlib.pyplot as plt
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QGridLayout, QVBoxLayout, QWidget, QPushButton, QLabel
 from PyQt5.QtGui import QFont
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from thread import CueGeneratorThread
 import numpy as np
 import joblib
@@ -76,6 +74,11 @@ class SignalWindow(QMainWindow):
             current_dir = os.getcwd()
             # path = None
             print(self.session_data['emg'].shape, len(self.session_data['cue']))
-            path = os.mkdir(f'{current_dir}/dataset/{self.name}')
-            count = len(os.listdir(path))+1
+            path = f'{current_dir}/dataset/{self.name}'
+            try:
+                count = len(os.listdir(path))+1
+            except:
+                os.mkdir(path)
+                count = len(os.listdir(path))+1
+            
             joblib.dump(self.session_data, f'{path}/{count}.sav')
