@@ -1,5 +1,0 @@
-Name: Amadi
-Age: 55
-Affected Part: arm
-Residual Sensory Capability: 1
-Gender: Male

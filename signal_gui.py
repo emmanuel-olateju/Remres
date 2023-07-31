@@ -1,8 +1,6 @@
-import matplotlib.pyplot as plt
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QGridLayout, QVBoxLayout, QWidget, QPushButton, QLabel
 from PyQt5.QtGui import QFont
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from thread import CueGeneratorThread
 import numpy as np
 import joblib
@@ -75,13 +73,12 @@ class SignalWindow(QMainWindow):
         if self.current_cue=='End of sessions':
             current_dir = os.getcwd()
             # path = None
-            count = 1
             print(self.session_data['emg'].shape, len(self.session_data['cue']))
-            for stack in self.session_data['emg']:
-                try:
-                    path = os.mkdir(f'{current_dir}/dataset/{self.name}')
-                    joblib.dump(stack, f'{path}/{count}.sav')
-                except:
-                    path = f'{current_dir}/dataset/{self.name}'
-                    joblib.dump(stack, f'{path}/{count}.sav')
-                count += 1
+            path = f'{current_dir}/dataset/{self.name}'
+            try:
+                count = len(os.listdir(path))+1
+            except:
+                os.mkdir(path)
+                count = len(os.listdir(path))+1
+            
+            joblib.dump(self.session_data, f'{path}/{count}.sav')
