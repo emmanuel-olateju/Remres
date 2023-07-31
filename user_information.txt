@@ -1,4 +1,4 @@
-Name: s
+Name: Chinedu
 Age: 
 Affected Part: 
 Residual Sensory Capability: 0
