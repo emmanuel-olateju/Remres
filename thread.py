@@ -17,7 +17,7 @@ class CueGeneratorThread(QThread):
         self.dataset = {}
         self.data_size = int(self.epoch_time/0.001)
         self.shape = np.empty((0, self.data_size))
-        self.emg = emg_signal('COM5', self.epoch_time, 'test') 
+        self.emg = emg_signal('COM7', self.epoch_time, 'test') 
 
     def run(self):
         DAQ = 0
