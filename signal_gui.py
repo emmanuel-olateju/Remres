@@ -76,6 +76,11 @@ class SignalWindow(QMainWindow):
             current_dir = os.getcwd()
             # path = None
             print(self.session_data['emg'].shape, len(self.session_data['cue']))
-            path = os.mkdir(f'{current_dir}/dataset/{self.name}')
-            count = len(os.listdir(path))+1
+            path = f'{current_dir}/dataset/{self.name}'
+            
+            try:
+                count = len(os.listdir(path))+1
+            except:
+                os.mkdir(path)
+                count = len(os.listdir(path))+1
             joblib.dump(self.session_data, f'{path}/{count}.sav')

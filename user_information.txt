@@ -1,5 +1,5 @@
-Name: d
-Age: 22
+Name: Chinedu
+Age: 
 Affected Part: 
 Residual Sensory Capability: 0
 Gender: Male
