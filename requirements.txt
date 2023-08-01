@@ -32,6 +32,7 @@ python-dateutil==2.8.2
 pytz==2023.3
 pyzmq==25.1.0
 pyserial==3.5
+seaborn==0.12.2
 sip==6.7.10
 six==1.16.0
 stack-data==0.6.2
