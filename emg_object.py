@@ -1,5 +1,6 @@
 from collections import deque
 from add_and_shift import add_and_shift
+from pylsl import StreamInfo, StreamOutlet
 import numpy as np
 import serial
 import time
@@ -20,6 +21,17 @@ class emg_signal:
 
         time.sleep(4)
         
+    def lsl_push(self, data):
+        stream_name = "EMGStream"
+        stream_type = "EEG"
+        channel_count = 1 
+        sampling_rate = 1000  # desired sampling rate (samples per second)
+        data_format = 'float32'  # Data format
+
+        info = StreamInfo(stream_name, stream_type, channel_count, sampling_rate)
+        outlet = StreamOutlet(info)
+        outlet.push_sample(data)
+
     def read(self,val=0):
         time.sleep(0.001)
         self.ser.reset_output_buffer()
@@ -28,6 +40,7 @@ class emg_signal:
         self.line=self.ser.read(3)
         temp = (self.line[1]<<8)+(self.line[0]&0xff)
         temp *= conversion_factor
+        self.lsl_push(temp)
         return temp
         
 
