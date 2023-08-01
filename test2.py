@@ -3,6 +3,7 @@ import serial
 # Replace 'COMX' with the correct serial port for your Arduino (e.g., '/dev/ttyACM0' on Linux or 'COM3' on Windows).
 ser = serial.Serial('COM8', 115200)
 
+
 try:
     while True:
         # Read data from the Arduino (readline() returns bytes)
