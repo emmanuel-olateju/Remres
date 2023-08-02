@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using LSL;
 
 public class Flexion_Extension : MonoBehaviour
 {
@@ -9,6 +10,13 @@ public class Flexion_Extension : MonoBehaviour
     public GameObject settings;
     public Button start;
     public bool running = false;
+
+    public StreamInlet inlet;
+    ContinuousResolver resolver;
+    private float[] sample;
+    private double[] sample_time;
+    private double time_out;
+    private bool stream;
 
     //hand body parts class implementation
     public class handMethods
@@ -87,32 +95,81 @@ public class Flexion_Extension : MonoBehaviour
     }
 
 
-
-
-
-
     //App running
 
     // Start is called before the first frame update
     void Start()
     {
+        stream = false;
+        resolver = new ContinuousResolver("type", "EEG");
+        //StartCoroutine(ResolveExpectedStream());
+
+        var results = resolver.results();
+        while (results.Length == 0)
+        {
+            Debug.Log("waiting for stream");
+            results = resolver.results();
+
+        }
+        Debug.Log(results);
+        inlet = new StreamInlet(results[0]);
+        Debug.Log("Stream found");
+        Debug.Log(inlet);
+        sample = new float[] {0};
+        if(inlet != null)
+        {
+            Debug.Log("inlet not null");
+            //time_out = 0.1f;
+            //inlet.pull_sample(sample,time_out);
+            inlet.open_stream();
+            inlet.pull_sample(sample);
+            Debug.Log(sample[0]);
+            stream = true;
+        }
+
         settings.SetActive(true);
         right_hand.SetActive(false);
         left_hand.SetActive(false);
         start.onClick.AddListener(startButtonClick);
         right_hand_methods = new handMethods(right_hand, "right");
         left_hand_methods = new handMethods(left_hand, "left");
-}
+    }
+
+    /*
+    IEnumerator ResolveExpectedStream()
+    {
+
+        var results = resolver.results();
+        while (results.Length == 0)
+        {
+            yield return new WaitForSeconds(.1f);
+            Debug.Log("waiting for stream");
+            results = resolver.results();
+        }
+        Debug.Log(results);
+        inlet = new StreamInlet(results[0]);
+        Debug.Log("Stream found");
+        Debug.Log(inlet);
+    }
+    */
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.UpArrow))
+        
+        if((inlet != null) && (stream == true))
+        {
+            Debug.Log("inlet exists");
+            inlet.pull_sample(sample);
+            Debug.Log(sample[0]);
+        }
+       
+        if (sample[0] == 0)
         {
             right_hand_methods.flexion();
             left_hand_methods.flexion();
         }
-        if (Input.GetKey(KeyCode.DownArrow))
+        if (sample[0] == 1)
         {
             right_hand_methods.extension();
             left_hand_methods.extension();
