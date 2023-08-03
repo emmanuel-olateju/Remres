@@ -41,6 +41,7 @@ class emg_signal:
         temp *= conversion_factor
         self.lsl_push(temp)
         return temp
+        
 
     def continuous_read(self,Ns=100,val=0):
         a = deque([0.0]*self.data_size)
@@ -56,5 +57,4 @@ if __name__ == '__main__':
     time.sleep(2)
 
     while True:
-        data = la.continuous_read(Ns=1)
-        print(data)
+        data = la.read()
