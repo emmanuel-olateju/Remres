@@ -16,17 +16,22 @@ class baselineCorrection(preprocessor):
         __mean = np.average(a=X, axis=-1)
         return (X.T-__mean).T
     
-class filter(preprocessor):
-    def __init__(self,name,sample_rate,low=1,high=30,order=2):
+class filtering(preprocessor):
+    def __init__(self,name,sample_rate,low=1,high=30,order=2,btype='bandpass'):
         super().__init__(name)
         self.__lowcut = low
         self.__highcut = high
         self.__nyquist_freq = 0.5 * sample_rate
         self.__low = self.__lowcut/self.__nyquist_freq
         self.__high = self.__highcut/self.__nyquist_freq
-        self.__range = [self.__low, self.__high]
+        if btype=='bandpass' or btype=='bandstop':
+            self.__range = [self.__low, self.__high]
+        elif btype=='lowpass':
+            self.__range = self.__high
+        elif btype=='highpass':
+            self.__range = self.__low
         self.__order = 2
-        self.__filter_coeffs = self.__b, self.__a = signal.butter(self.__order,self.__range,btype='band')
+        self.__filter_coeffs = self.__b, self.__a = signal.butter(self.__order,self.__range,btype=btype)
 
     def fit_transform(self,X,y=None):
         if X.ndim==1:
@@ -36,3 +41,10 @@ class filter(preprocessor):
             for i in range(X.shape[0]):
                 __data = np.vstack((__data,signal.filtfilt(self.__b, self.__a, X[i,:])))
             return __data
+        
+class rectification(preprocessor):
+    def __init__(self,name):
+        super().__init__(name)
+    
+    def fit_transform(self,X,y=None):
+        return abs(X)
