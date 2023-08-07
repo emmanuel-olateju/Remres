@@ -1,1 +1,5 @@
- 
+Name: Mark
+Age: 
+Affected Part: 
+Residual Sensory Capability: 0
+Gender: Male

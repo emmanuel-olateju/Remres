@@ -39,7 +39,7 @@ class emg_signal:
         self.line=self.ser.read(3)
         temp = (self.line[1]<<8)+(self.line[0]&0xff)
         temp *= conversion_factor
-        self.lsl_push(temp)
+        # self.lsl_push(temp)
         return temp
         
 
@@ -50,11 +50,11 @@ class emg_signal:
             a = add_and_shift(a, value, self.data_size)
         return np.array(a)
 
-if __name__ == '__main__':
-    global va
-    va=0
-    la = emg_signal('COM11', epoch_time=0.1, file_name='test', baud_rate=2000000)
-    time.sleep(2)
+# if __name__ == '__main__':
+#     global va
+#     va=0
+#     la = emg_signal('COM11', epoch_time=0.1, file_name='test', baud_rate=2000000)
+#     time.sleep(2)
 
-    while True:
-        data = la.read()
+#     while True:
+#         data = la.read()
