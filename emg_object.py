@@ -58,4 +58,3 @@ if __name__ == '__main__':
 
     while True:
         data = la.read()
-        print(data)
