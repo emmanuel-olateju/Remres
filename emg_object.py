@@ -39,7 +39,7 @@ class emg_signal:
         self.line=self.ser.read(3)
         temp = (self.line[1]<<8)+(self.line[0]&0xff)
         temp *= conversion_factor
-        self.lsl_push(temp)
+        self.lsl_push([temp])
         return temp
         
 
@@ -58,3 +58,4 @@ if __name__ == '__main__':
 
     while True:
         data = la.read()
+        print(data)
