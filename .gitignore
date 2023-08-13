@@ -70,3 +70,6 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /simulators/My project/[Aa]ssets/[Ss]treamingAssets/aa.meta
 /simulators/My project/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# model files
+*.model
